@@ -23,12 +23,14 @@ repositories {
 
 dependencies {
 	implementation 'com.auth0:java-jwt:4.4.0'
+	implementation 'org.hibernate:hibernate-core:5.4.33.Final'
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {
