@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
+@AllArgsConstructor
 @Data
 public class Product {
+    
     private int id;
     private String name;
     private int price;
