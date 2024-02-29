@@ -26,7 +26,8 @@ public class StockController {
     @GetMapping
     public ResponseEntity<List<Product>> getUsers() {
         List<Product> product = new ArrayList<>();
-        products.add(new Product(1, "Product 1", 100, 10, new Table(1, 200, 100, "Red")));
+        Product table = new Table(1,1,1,1,1,1,"red");
+        products.add(table);
         for (Product prod : products) {
             product.add(modelMapper.map(prod, Product.class));
         }
