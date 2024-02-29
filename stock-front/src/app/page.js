@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import Link from "next/link";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -42,7 +43,7 @@ export default function Home() {
       ];
 
       // Simuler un appel API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       setProducts(fakeApiData);
     };
@@ -58,7 +59,7 @@ export default function Home() {
   return (
       <main className="flex flex-col justify-center items-center h-[100vh]">
         <div
-            className="relative flex max-w-[500px] h-[430px] w-full flex-col rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none"
+            className="relative flex max-w-[90vw] h-[430px] w-full flex-col rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none"
         >
           <div
               className="flex h-fit w-full items-center justify-between rounded-t-2xl bg-white px-4 pb-[20px] pt-4 shadow-2xl shadow-gray-100 dark:!bg-navy-700 dark:shadow-none"
@@ -66,9 +67,9 @@ export default function Home() {
             <h4 className="text-lg font-bold text-navy-700 dark:text-white">
               Produits
             </h4>
-            <button type="button"
+            <Link href={`/product/new`}
                     className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">+
-            </button>
+            </Link>
             {/*<button*/}
             {/*    className="linear rounded-[20px] bg-lightPrimary px-4 py-2 text-base font-medium text-brand-500 transition duration-200 hover:bg-gray-100 active:bg-gray-200 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/20"*/}
             {/*>*/}
@@ -112,6 +113,11 @@ export default function Home() {
                     Dimensions (l*L*H)
                   </div>
                 </th>
+                <div
+                    className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                >
+                  Couleur
+                </div>
                 <th
                     colSpan="1"
                     role="columnheader"
@@ -158,13 +164,18 @@ export default function Home() {
                   </td>
                   <td className="py-3 text-sm" role="cell">
                     <p className="text-md font-medium text-gray-600 dark:text-white">
-                      {product.price}
+                      {product.color}
                     </p>
                   </td>
                   <td className="py-3 text-sm" role="cell">
-                    <button type="button"
+                    <p className="text-md font-medium text-gray-600 dark:text-white">
+                      {product.price} €
+                    </p>
+                  </td>
+                  <td className="py-3 text-sm" role="cell">
+                    <Link href={`/product/${product.id}`}
                             className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier
-                    </button>
+                    </Link>
                     <button type="button"
                             onClick={() => handleDelete(product.id)}
                             className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
