@@ -31,7 +31,7 @@ public class StockController {
             product.add(modelMapper.map(prod, Product.class));
         }
         return new ResponseEntity<>(
-                products,
+                product,
                 HttpStatus.OK
         );
     }
