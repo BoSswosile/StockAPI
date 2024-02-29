@@ -26,14 +26,11 @@ public class StockController {
     @GetMapping
     public ResponseEntity<List<Product>> getUsers() {
         List<Product> product = new ArrayList<>();
-        Product table = new Table(1,1,1,1,1,1,"red");
+        Table table = Table.builder().id(1).name("Table de kevin").price(100).quantity(10).length(100).width(100).height(100).color("black").build();
         products.add(table);
         for (Product prod : products) {
             product.add(modelMapper.map(prod, Product.class));
         }
-        return new ResponseEntity<>(
-                product,
-                HttpStatus.OK
-        );
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }
