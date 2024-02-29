@@ -1,6 +1,60 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+
+  // Simuler le chargement des données de l'API
+  useEffect(() => {
+    const fetchData = async () => {
+      // Simuler une API avec un délai
+      const fakeApiData = [
+        {
+          "id": 1,
+          "name": "Table de Kevin",
+          "price": 100,
+          "quantity": 10,
+          "length": 100,
+          "width": 100,
+          "height": 100,
+          "color": "black"
+        },
+        {
+          "id": 2,
+          "name": "Table de Lora",
+          "price": 100,
+          "quantity": 10,
+          "length": 100,
+          "width": 100,
+          "height": 100,
+          "color": "black"
+        },
+        {
+          "id": 3,
+          "name": "Table de Marc",
+          "price": 100,
+          "quantity": 10,
+          "length": 100,
+          "width": 100,
+          "height": 100,
+          "color": "black"
+        }
+      ];
+
+      // Simuler un appel API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      setProducts(fakeApiData);
+    };
+
+    fetchData();
+  }, []);
+
+  // Fonction pour gérer la suppression d'un produit
+  const handleDelete = (id) => {
+    setProducts(products.filter(product => product.id !== id));
+  };
+
   return (
       <main className="flex flex-col justify-center items-center h-[100vh]">
         <div
@@ -83,39 +137,41 @@ export default function Home() {
               </tr>
               </thead>
               <tbody role="rowgroup" className="px-4">
-              <tr role="row">
-                <td className="py-3 text-sm" role="cell">
-                  <p
-                      className="text-sm font-medium text-navy-700 dark:text-white"
-                  >
-                    Table IKEA
-                  </p>
-                </td>
-                <td className="py-3 text-sm" role="cell">
-                  <p className="text-md font-medium text-gray-600 dark:text-white">
-                    9821
-                  </p>
-                </td>
-                <td className="py-3 text-sm" role="cell">
-                  <p className="text-md font-medium text-gray-600 dark:text-white">
-                    9821
-                  </p>
-                </td>
-                <td className="py-3 text-sm" role="cell">
-                  <p className="text-md font-medium text-gray-600 dark:text-white">
-                    9821
-                  </p>
-                </td>
-                <td className="py-3 text-sm" role="cell">
-                  <button type="button"
-                          className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier
-                  </button>
-                  <button type="button"
-                          className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
-                  </button>
-                </td>
-              </tr>
-
+              {products.map((product) => (
+                <tr role="row">
+                  <td className="py-3 text-sm" role="cell">
+                    <p
+                        className="text-sm font-medium text-navy-700 dark:text-white"
+                    >
+                      {product.name}
+                    </p>
+                  </td>
+                  <td className="py-3 text-sm" role="cell">
+                    <p className="text-md font-medium text-gray-600 dark:text-white">
+                      {product.quantity}
+                    </p>
+                  </td>
+                  <td className="py-3 text-sm" role="cell">
+                    <p className="text-md font-medium text-gray-600 dark:text-white">
+                      {product.length}*{product.width}*{product.height}
+                    </p>
+                  </td>
+                  <td className="py-3 text-sm" role="cell">
+                    <p className="text-md font-medium text-gray-600 dark:text-white">
+                      {product.price}
+                    </p>
+                  </td>
+                  <td className="py-3 text-sm" role="cell">
+                    <button type="button"
+                            className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier
+                    </button>
+                    <button type="button"
+                            onClick={() => handleDelete(product.id)}
+                            className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
+                    </button>
+                  </td>
+                </tr>
+              ))}
               </tbody>
             </table>
           </div>
