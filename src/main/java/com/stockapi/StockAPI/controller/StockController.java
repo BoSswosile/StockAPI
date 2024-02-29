@@ -1,7 +1,6 @@
 package com.stockapi.StockAPI.controller;
 
 import com.stockapi.StockAPI.model.Product;
-import com.stockapi.StockAPI.model.Table;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -28,17 +27,16 @@ public class StockController {
     @GetMapping
     public ResponseEntity<List<Product>> getProduct() {
         List<Product> product = new ArrayList<>();
-        Table table = Table.builder().id(1).name("Table de Fred").price(100).quantity(10).length(100).width(100).height(100).color("black").build();
-        products.add(table);
         for (Product prod : products) {
+
             product.add(modelMapper.map(prod, Product.class));
         }
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        products.add(product);
+    public ResponseEntity<Product> createProduct(@RequestBody Object object) {
+        Product product = modelMapper.map(object, Product.class);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
@@ -66,11 +64,11 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping ("/search/{name}")
-    public ResponseEntity<List<Product>> searchProduct(@PathVariable String name){
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<Product>> searchProduct(@PathVariable String name) {
         List<Product> product = new ArrayList<>();
-        for(Product prod : products){
-            if(prod.getName().contains(name)){
+        for (Product prod : products) {
+            if (prod.getName().contains(name)) {
                 product.add(prod);
                 return new ResponseEntity<>(product, HttpStatus.OK);
             }
@@ -78,10 +76,10 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping ("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable int id){
-        for(Product prod : products){
-            if(prod.getId() == id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable int id) {
+        for (Product prod : products) {
+            if (prod.getId() == id) {
                 return new ResponseEntity<>(prod, HttpStatus.OK);
             }
         }
