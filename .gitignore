@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+src/config.properties
+target/classes/config.properties
