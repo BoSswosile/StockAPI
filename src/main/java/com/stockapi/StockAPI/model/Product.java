@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@SuperBuilder
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Document
+@NoArgsConstructor
+@SuperBuilder
 public class Product {
     private int id;
     private String name;
