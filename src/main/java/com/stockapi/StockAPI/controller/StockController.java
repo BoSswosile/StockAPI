@@ -24,7 +24,7 @@ public class StockController {
     List<Product> products = new ArrayList<>();
 
     @GetMapping
-    public ResponseEntity<List<Product>> getUsers() {
+    public ResponseEntity<List<Product>> getProduct() {
         List<Product> product = new ArrayList<>();
         Table table = Table.builder().id(1).name("Table de kevin").price(100).quantity(10).length(100).width(100).height(100).color("black").build();
         products.add(table);
@@ -32,5 +32,35 @@ public class StockController {
             product.add(modelMapper.map(prod, Product.class));
         }
         return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        products.add(product);
+        return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
+        for (Product prod : products) {
+            if (prod.getId() == product.getId()) {
+                prod.setName(product.getName());
+                prod.setPrice(product.getPrice());
+                prod.setQuantity(product.getQuantity());
+                return new ResponseEntity<>(prod, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable int id) {
+        for (Product prod : products) {
+            if (prod.getId() == id) {
+                products.remove(prod);
+                return new ResponseEntity<>(prod, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
