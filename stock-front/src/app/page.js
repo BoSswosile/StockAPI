@@ -70,11 +70,6 @@ export default function Home() {
             <Link href={`/product/new`}
                     className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">+
             </Link>
-            {/*<button*/}
-            {/*    className="linear rounded-[20px] bg-lightPrimary px-4 py-2 text-base font-medium text-brand-500 transition duration-200 hover:bg-gray-100 active:bg-gray-200 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/20"*/}
-            {/*>*/}
-            {/*  See all*/}
-            {/*</button>*/}
           </div>
           <div className="w-full overflow-x-scroll px-4 md:overflow-x-hidden">
             <table role="table" className="w-full min-w-[500px] overflow-x-scroll">
@@ -113,11 +108,17 @@ export default function Home() {
                     Dimensions (l*L*H)
                   </div>
                 </th>
-                <div
-                    className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                <th
+                    colSpan="1"
+                    role="columnheader"
+                    title="Toggle SortBy"
                 >
-                  Couleur
-                </div>
+                  <div
+                      className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                  >
+                    Couleur
+                  </div>
+                </th>
                 <th
                     colSpan="1"
                     role="columnheader"
@@ -143,7 +144,7 @@ export default function Home() {
               </tr>
               </thead>
               <tbody role="rowgroup" className="px-4">
-              {products.map((product) => (
+              {products.length > 0 && products.map((product) => (
                 <tr role="row">
                   <td className="py-3 text-sm" role="cell">
                     <p
