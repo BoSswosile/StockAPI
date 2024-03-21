@@ -1,23 +1,23 @@
 package com.stockapi.StockAPI.controller;
 
 import com.stockapi.StockAPI.model.Product;
-import lombok.AllArgsConstructor;
+import com.stockapi.StockAPI.services.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.desktop.SystemEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("product")
 @RequiredArgsConstructor
-public class StockController {
+public class ProductController {
+    @Autowired
+    ProductService productService;
 
     @Autowired
     final ModelMapper modelMapper;
@@ -26,12 +26,8 @@ public class StockController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getProduct() {
-        List<Product> product = new ArrayList<>();
-        for (Product prod : products) {
-
-            product.add(modelMapper.map(prod, Product.class));
-        }
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        List<Product> products = productService.getProduct();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @PostMapping("/create")
