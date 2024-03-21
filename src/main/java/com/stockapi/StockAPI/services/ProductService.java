@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public interface ProductService {
 
-    List<Product> getProduct();
+    List<Product> getProducts();
 
     Product createProduct(Product product);
 }

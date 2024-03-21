@@ -16,25 +16,4 @@ import java.util.List;
 @RequestMapping("user")
 @RequiredArgsConstructor
 public class UserController {
-
-    @Autowired
-    final ModelMapper modelMapper;
-
-    List<User> users = new ArrayList<>();
-
-    @GetMapping
-    public ResponseEntity<List<User>> getUser() {
-        List<User> lst_user = new ArrayList<>();
-        for (User user : users) {
-            lst_user.add(modelMapper.map(user, User.class));
-        }
-        return new ResponseEntity<>(lst_user, HttpStatus.OK);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody Object object) {
-        User user = modelMapper.map(object, User.class);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
-
 }
