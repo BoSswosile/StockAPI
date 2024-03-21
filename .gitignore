@@ -37,3 +37,7 @@ out/
 .vscode/
 src/config.properties
 target/classes/config.properties
+src/main/resources/application.properties
+src/main/resources/application.yaml
+src/main/resources/application.yaml
+src/main/resources/application.properties
