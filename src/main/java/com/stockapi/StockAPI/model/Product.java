@@ -18,11 +18,12 @@ import javax.persistence.*;
 public class Product {
     @Id
     private String id;
+    private String name;
     @Column(
             unique = true,
             nullable = false
     )
-    private String name;
+    private String refId;
     private int price;
     private int quantity;
     private int length;

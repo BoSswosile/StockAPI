@@ -20,4 +20,6 @@ public interface ProductService {
     Product update(Optional<Product> product, Product updatedProduct);
 
     Optional<Product> findById(String id);
+
+    Optional<Product> findByRefId(String ref);
 }

@@ -20,4 +20,6 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     void deleteById(String id);
 
     Optional<Product> findById(String id);
+
+    Optional<Product> findByRefId(String ref);
 }

@@ -63,4 +63,16 @@ public class ProductController {
             );
         }
     }
+
+    @GetMapping("/ByRefProduct/{ref}")
+    public ResponseEntity<Optional<Product>> findByRefId(String ref){
+        Optional<Product> product = productService.findByRefId(ref);
+        if(product.isEmpty()){
+            return new ResponseEntity<>(
+                    HttpStatus.NOT_FOUND
+            );
+        }else{
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        }
+    }
 }
