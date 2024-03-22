@@ -30,7 +30,7 @@ export default function AddProductPage() {
         const refId = generateRefId();
         const body = {
             name: product.name,
-            refId,
+            refId: refId,
             price: product.price,
             quantity: product.quantity,
             length: product.length,
