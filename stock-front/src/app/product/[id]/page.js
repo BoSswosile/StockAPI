@@ -1,8 +1,12 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import {useRouter, useSearchParams} from 'next/navigation'
 
-export default function EditProductPage( { params: { id } }) {
+export default function EditProductPage( {params} ) {
+
+    const searchParams = useSearchParams()
+    const id = params.id;
+    const router = useRouter();
 
     const [product, setProduct] = useState({
         name: '',
@@ -15,15 +19,19 @@ export default function EditProductPage( { params: { id } }) {
     });
 
     useEffect(() => {
-        const fakeApiData = [
-            { id: 1, name: 'Table de Kevin', price: 100, quantity: 10, length: 100, width: 100, height: 100, color: 'black' },
-            { id: 2, name: 'Table de Lora', price: 200, quantity: 20, length: 200, width: 200, height: 200, color: 'white' },
-            { id: 3, name: 'Table de Marc', price: 300, quantity: 30, length: 300, width: 300, height: 300, color: 'red' }
-        ];
+        // Assuming you have a way to fetch the product details based on the id
+        // For demonstration, we'll use a mock fetch
+        console.log(id)
+        const fetchProductDetails = async () => {
+            const response = await fetch(`http://localhost:8080/product/${id}`);
+            console.log(response);
 
-        const productToEdit = fakeApiData.find(p => p.id === parseInt(id));
-        if (productToEdit) {
-            setProduct(productToEdit);
+            const data = await response.json();
+            setProduct(data); // Assuming the response is an array with a single product
+        };
+
+        if (id) {
+            fetchProductDetails();
         }
     }, [id]);
 
@@ -32,9 +40,38 @@ export default function EditProductPage( { params: { id } }) {
         setProduct({ ...product, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('Produit modifié : ' + JSON.stringify(product));
+        const body = {
+            id: id,
+            refId: product.refId,
+            name: product.name,
+            price: product.price,
+            quantity: product.quantity,
+            length: product.length,
+            width: product.width,
+            height: product.height,
+            color: product.color
+        };
+
+        try {
+            const response = await fetch(`http://localhost:8080/product/update/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                router.push('/');
+            } else {
+                alert('Erreur lors de la modification du produit');
+            }
+        } catch (error) {
+            console.error('Erreur de réseau:', error);
+            alert('Erreur de réseau');
+        }
     };
 
     return (
