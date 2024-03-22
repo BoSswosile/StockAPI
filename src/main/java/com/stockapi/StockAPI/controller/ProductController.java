@@ -34,7 +34,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable String id) {
         productService.deleteById(id);
         return new ResponseEntity<>("Suppression successful", HttpStatus.OK);
