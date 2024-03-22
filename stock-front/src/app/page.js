@@ -8,44 +8,17 @@ export default function Home() {
   // Simuler le chargement des données de l'API
   useEffect(() => {
     const fetchData = async () => {
-      // Simuler une API avec un délai
-      const fakeApiData = [
-        {
-          "id": 1,
-          "name": "Table de Kevin",
-          "price": 100,
-          "quantity": 10,
-          "length": 100,
-          "width": 100,
-          "height": 100,
-          "color": "black"
-        },
-        {
-          "id": 2,
-          "name": "Table de Lora",
-          "price": 100,
-          "quantity": 10,
-          "length": 100,
-          "width": 100,
-          "height": 100,
-          "color": "black"
-        },
-        {
-          "id": 3,
-          "name": "Table de Marc",
-          "price": 100,
-          "quantity": 10,
-          "length": 100,
-          "width": 100,
-          "height": 100,
-          "color": "black"
+      try {
+        const response = await fetch('http://localhost:8080/product');
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des produits');
         }
-      ];
-
-      // Simuler un appel API
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setProducts(fakeApiData);
+        console.log('response', response)
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des produits:', error);
+      }
     };
 
     fetchData();
