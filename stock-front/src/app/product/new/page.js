@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation'
 
 export default function AddProductPage() {
     const [product, setProduct] = useState({
@@ -13,14 +13,50 @@ export default function AddProductPage() {
         color: ''
     });
 
+    const router = useRouter();
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setProduct({ ...product, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const generateRefId = () => {
+        const randomNumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+        return `${product.name}${product.color}${randomNumber}`;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('Produit ajouté : ' + JSON.stringify(product));
+        const refId = generateRefId();
+        const body = {
+            name: product.name,
+            refId,
+            price: product.price,
+            quantity: product.quantity,
+            length: product.length,
+            width: product.width,
+            height: product.height,
+            color: product.color
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/product/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                router.push('/');
+            } else {
+                alert('Erreur lors de l\'ajout du produit');
+            }
+        } catch (error) {
+            console.error('Erreur de réseau:', error);
+            alert('Erreur de réseau');
+        }
     };
 
     return (
