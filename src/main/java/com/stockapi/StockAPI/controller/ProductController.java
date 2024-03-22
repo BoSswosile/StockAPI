@@ -51,7 +51,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Product> update(@PathVariable String id, @RequestBody Product updatedProduct){
         Optional<Product> product = productService.findById(id);
         if(product.isEmpty()){
