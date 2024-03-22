@@ -7,26 +7,38 @@ export default function Home() {
 
   // Simuler le chargement des données de l'API
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/product');
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des produits');
-        }
-        console.log('response', response)
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des produits:', error);
-      }
-    };
-
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/product');
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des produits');
+      }
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des produits:', error);
+    }
+  };
+
   // Fonction pour gérer la suppression d'un produit
-  const handleDelete = (id) => {
-    setProducts(products.filter(product => product.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/product/delete/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la suppression du produit');
+      }
+
+      fetchData();
+
+    } catch (error) {
+      console.error('Erreur lors de la suppression du produit:', error);
+    }
   };
 
   return (
@@ -118,7 +130,7 @@ export default function Home() {
               </thead>
               <tbody role="rowgroup" className="px-4">
               {products.length > 0 && products.map((product) => (
-                <tr role="row">
+                <tr role="row" key={product.id}>
                   <td className="py-3 text-sm" role="cell">
                     <p
                         className="text-sm font-medium text-navy-700 dark:text-white"
