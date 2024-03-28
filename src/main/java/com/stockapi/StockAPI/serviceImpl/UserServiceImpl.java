@@ -4,7 +4,6 @@ import com.stockapi.StockAPI.model.Role;
 import com.stockapi.StockAPI.model.User;
 import com.stockapi.StockAPI.repositories.RoleRepo;
 import com.stockapi.StockAPI.repositories.UserRepo;
-import com.stockapi.StockAPI.security.JwtService;
 import com.stockapi.StockAPI.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,15 +13,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
-public class UserImplem implements UserService {
+public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepo roleRepo;
     @Autowired
     UserRepo userRepo;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    JwtService jwtService;
 
     @Override
     public User register(User user) throws NoSuchAlgorithmException {
@@ -35,14 +32,14 @@ public class UserImplem implements UserService {
     }
 
     @Override
-    public Map<String, Object> login(String email, String password) throws NoSuchAlgorithmException {
+    public Map<String, Object> login(String email, String password) {
         Optional<User> user = userRepo.findByEmail(email);
         if (user.isEmpty() || !bCryptPasswordEncoder.matches(password, user.get().getPassword()))
             return null;
         Map<String, Object> result = new HashMap<>();
-        result.put("jwt", jwtService.generateToken(user.get()));
+       // result.put("jwt", jwtService.generateToken(user.get()));
         result.put("email", user.get().getEmail());
-        result.put("name", user.get().getName());
+        result.put("name", user.get().getUsername());
         return result;
     }
 }

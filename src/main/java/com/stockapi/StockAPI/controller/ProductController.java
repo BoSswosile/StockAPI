@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,7 +30,9 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProducts(), HttpStatus.OK);
     }
 
+
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Product> createProduct(@RequestBody Object object) {
         Product product = new ModelMapper().map(object, Product.class);
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
