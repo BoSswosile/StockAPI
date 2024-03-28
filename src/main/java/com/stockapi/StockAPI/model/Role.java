@@ -21,7 +21,7 @@ public class Role {
     private String id;
     private String roleName;
 
-    public enum RoleName{
+    public enum RoleName {
         ADMINISTRATOR,STOREKEEPER,VIEWER
     }
 

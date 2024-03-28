@@ -1,7 +1,9 @@
 package com.stockapi.StockAPI.security;
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,10 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    public String generateToken(UserDetails userDetails, Map<String, String> extraClaims) throws NoSuchAlgorithmException {
+    @Value("${jwt.secret}")
+    private String secret;
+
+    public String generateToken(UserDetails userDetails, Map<String, String> extraClaims) {
         return Jwts.builder().setSubject(userDetails.getUsername()).setClaims(extraClaims).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)).signWith(generateSecretKey(), SignatureAlgorithm.HS256).compact();
     }
 
@@ -27,10 +32,8 @@ public class JwtService {
         return generateToken(userDetails, new HashMap<>());
     }
 
-    private static Key generateSecretKey() throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-        SecureRandom secureRandom = new SecureRandom();
-        keyGenerator.init(secureRandom);
-        return keyGenerator.generateKey();
+    private Key generateSecretKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(this.secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
