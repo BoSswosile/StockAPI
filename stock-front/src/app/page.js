@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
       <main className="flex flex-col justify-center items-center h-[100vh]">
-        <div className="flex justify-end w-full px-4 mb-4">
+        <div className="flex justify-center w-full px-4 mb-4">
           <div className="w-auto relative">
             <input
                 type="text"
