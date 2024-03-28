@@ -20,7 +20,7 @@ public class AuthController {
     UserService userService;
 
     @PostMapping("register")
-    public ResponseEntity<?> registerStudent(@RequestBody User entity) {
+    public ResponseEntity<?> registerStudent(@RequestBody User entity) throws NoSuchAlgorithmException {
         User student = userService.register(entity);
         if (student == null) return new ResponseEntity<>("Internal Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(student, HttpStatus.CREATED);

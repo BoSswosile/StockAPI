@@ -25,7 +25,7 @@ public class UserImplem implements UserService {
     JwtService jwtService;
 
     @Override
-    public User register(User user) {
+    public User register(User user) throws NoSuchAlgorithmException {
         Optional<Role> role = roleRepo.findByRoleName(Role.RoleName.VIEWER.name());
         if(role.isEmpty()) return null;
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
@@ -41,10 +41,8 @@ public class UserImplem implements UserService {
             return null;
         Map<String, Object> result = new HashMap<>();
         result.put("jwt", jwtService.generateToken(user.get()));
-        result.put("email", email);
-        List<String> roles = new ArrayList<>();
-        user.get().getRoles().forEach(role -> roles.add(role.getRoleName()));
-        result.put("roles", roles);
+        result.put("email", user.get().getEmail());
+        result.put("name", user.get().getName());
         return result;
     }
 }
