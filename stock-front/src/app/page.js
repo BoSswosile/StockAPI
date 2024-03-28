@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Simuler le chargement des données de l'API
   useEffect(() => {
@@ -41,8 +42,31 @@ export default function Home() {
     }
   };
 
+  const filteredProducts = products.filter(product =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
       <main className="flex flex-col justify-center items-center h-[100vh]">
+        <div className="flex justify-end w-full px-4 mb-4">
+          <div className="w-auto relative">
+            <input
+                type="text"
+                placeholder="Rechercher un produit..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            {/* Icône de recherche */}
+            <div className="absolute left-0 top-0 flex items-center h-full pl-3">
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
         <div
             className="relative flex max-w-[90vw] h-[430px] w-full flex-col rounded-[10px] border-[1px] border-gray-200 bg-white bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none"
         >
@@ -53,7 +77,7 @@ export default function Home() {
               Produits
             </h4>
             <Link href={`/product/new`}
-                    className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">+
+                  className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">+
             </Link>
           </div>
           <div className="w-full overflow-x-scroll px-4 md:overflow-x-hidden">
@@ -129,45 +153,45 @@ export default function Home() {
               </tr>
               </thead>
               <tbody role="rowgroup" className="px-4">
-              {products.length > 0 && products.map((product) => (
-                <tr role="row" key={product.id}>
-                  <td className="py-3 text-sm" role="cell">
-                    <p
-                        className="text-sm font-medium text-navy-700 dark:text-white"
-                    >
-                      {product.name}
-                    </p>
-                  </td>
-                  <td className="py-3 text-sm" role="cell">
-                    <p className="text-md font-medium text-gray-600 dark:text-white">
-                      {product.quantity}
-                    </p>
-                  </td>
-                  <td className="py-3 text-sm" role="cell">
-                    <p className="text-md font-medium text-gray-600 dark:text-white">
-                      {product.length}*{product.width}*{product.height}
-                    </p>
-                  </td>
-                  <td className="py-3 text-sm" role="cell">
-                    <p className="text-md font-medium text-gray-600 dark:text-white">
-                      {product.color}
-                    </p>
-                  </td>
-                  <td className="py-3 text-sm" role="cell">
-                    <p className="text-md font-medium text-gray-600 dark:text-white">
-                      {product.price} €
-                    </p>
-                  </td>
-                  <td className="py-3 text-sm" role="cell">
-                    <Link href={`/product/${product.id}`}
+              {filteredProducts.length > 0 && filteredProducts.map((product) => (
+                  <tr role="row" key={product.id}>
+                    <td className="py-3 text-sm" role="cell">
+                      <p
+                          className="text-sm font-medium text-navy-700 dark:text-white"
+                      >
+                        {product.name}
+                      </p>
+                    </td>
+                    <td className="py-3 text-sm" role="cell">
+                      <p className="text-md font-medium text-gray-600 dark:text-white">
+                        {product.quantity}
+                      </p>
+                    </td>
+                    <td className="py-3 text-sm" role="cell">
+                      <p className="text-md font-medium text-gray-600 dark:text-white">
+                        {product.length}*{product.width}*{product.height}
+                      </p>
+                    </td>
+                    <td className="py-3 text-sm" role="cell">
+                      <p className="text-md font-medium text-gray-600 dark:text-white">
+                        {product.color}
+                      </p>
+                    </td>
+                    <td className="py-3 text-sm" role="cell">
+                      <p className="text-md font-medium text-gray-600 dark:text-white">
+                        {product.price} €
+                      </p>
+                    </td>
+                    <td className="py-3 text-sm" role="cell">
+                      <Link href={`/product/${product.id}`}
                             className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier
-                    </Link>
-                    <button type="button"
-                            onClick={() => handleDelete(product.id)}
-                            className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
-                    </button>
-                  </td>
-                </tr>
+                      </Link>
+                      <button type="button"
+                              onClick={() => handleDelete(product.id)}
+                              className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
+                      </button>
+                    </td>
+                  </tr>
               ))}
               </tbody>
             </table>
