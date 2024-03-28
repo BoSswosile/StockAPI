@@ -39,16 +39,9 @@ public class AuthController {
         if (request.getEmail() == null || request.getPassword() == null)
             return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
         Map<String, Object> result = userService.login(request.getEmail(), request.getPassword());
-        System.out.println(result);
         if (result == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setAccessToken(authService.login(request));
         return new ResponseEntity<>(jwtAuthResponse.getAccessToken(), HttpStatus.OK);
-    }
-
-    @PostMapping("test")
-    public ResponseEntity<?> test(@RequestBody String email) {
-        if (email == null) return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(userRepo.findByEmail(email), HttpStatus.OK);
     }
 }

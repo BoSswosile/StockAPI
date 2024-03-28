@@ -39,8 +39,7 @@ public class JwtTokenProvider {
         return true;
 
     }
-
-    public String getUsername(String token) {
-        return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getPayload().getSubject();
+    public String getEmail(String token) {
+        return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getBody().get("name", String.class);
     }
 }
