@@ -6,7 +6,6 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Simuler le chargement des données de l'API
   useEffect(() => {
     fetchData();
   }, []);
