@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 
+import FloatingNotification from "@/components/FloatingNotification";
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,6 +49,7 @@ export default function Home() {
 
   return (
       <main className="flex flex-col justify-center items-center h-[100vh]">
+        <FloatingNotification />
         <div className="flex justify-center w-full px-4 mb-4">
           <div className="w-auto relative">
             <input
