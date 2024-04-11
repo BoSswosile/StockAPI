@@ -1,13 +1,22 @@
 "use client";
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
+import FloatingNotification from "@/components/FloatingNotification";
 
 export default function RegisterPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
+
+    useEffect(() => {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            localStorage.setItem('message', "Vous êtes déjà connecté");
+            router.push('/');
+        }
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -20,17 +29,18 @@ export default function RegisterPage() {
             body: JSON.stringify({ name, email, password }),
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
+        // if 201 created, redirect to login page
+        if(response.status === 201) {
+            localStorage.setItem('message', "Vous êtes maintenant enregistré");
             router.push('/auth/login');
-        } else {
-            console.error('Erreur lors de l\'inscription');
+        }else {
+            alert('Erreur lors de l\'inscription');
         }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <FloatingNotification />
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
