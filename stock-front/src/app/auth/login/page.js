@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 
@@ -7,6 +7,14 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
+
+    useEffect(() => {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            localStorage.setItem('message', "Vous êtes déjà connecté");
+            router.push('/');
+        }
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -20,9 +28,11 @@ export default function LoginPage() {
         });
 
         if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            localStorage.setItem('jwt', data.jwt);
+            const jwt = await response.text();
+            console.log(jwt);
+            localStorage.setItem('jwt', jwt);
+            localStorage.setItem('message', "Vous êtes maintenant connecté");
+            console.log("jwt", jwt)
             router.push('/');
         } else {
             console.error('Email ou mot de passe incorrect');
