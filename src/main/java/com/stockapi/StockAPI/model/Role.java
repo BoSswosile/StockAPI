@@ -22,7 +22,7 @@ public class Role {
     private String roleName;
 
     public enum RoleName {
-        ADMINISTRATOR,STOREKEEPER,VIEWER
+        ROLE_ADMINISTRATOR,ROLE_STOREKEEPER,ROLE_VIEWER
     }
 
 }

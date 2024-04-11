@@ -1,6 +1,10 @@
 package com.stockapi.StockAPI.controller;
 
+import com.stockapi.StockAPI.model.JwtAuthResponse;
+import com.stockapi.StockAPI.model.LoginDto;
 import com.stockapi.StockAPI.model.User;
+import com.stockapi.StockAPI.repositories.UserRepo;
+import com.stockapi.StockAPI.services.AuthService;
 import com.stockapi.StockAPI.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +23,28 @@ public class AuthController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    AuthService authService;
+
+    @Autowired
+    UserRepo userRepo;
+
+
     @PostMapping("register")
-    public ResponseEntity<?> registerStudent(@RequestBody User entity) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> register(@RequestBody User entity) throws NoSuchAlgorithmException {
         User student = userService.register(entity);
         if (student == null) return new ResponseEntity<>("Internal Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) throws NoSuchAlgorithmException {
-        String email = request.get("email");
-        String password = request.get("password");
-        Map<String, Object> result = userService.login(email, password);
-        if (result == null) return new ResponseEntity<>("email or password incorrect", HttpStatus.FORBIDDEN);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public ResponseEntity<?> login(@RequestBody LoginDto request) throws NoSuchAlgorithmException {
+        if (request.getEmail() == null || request.getPassword() == null)
+            return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
+        Map<String, Object> result = userService.login(request.getEmail(), request.getPassword());
+        if (result == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+        jwtAuthResponse.setAccessToken(authService.login(request));
+        return new ResponseEntity<>(jwtAuthResponse.getAccessToken(), HttpStatus.OK);
     }
 }

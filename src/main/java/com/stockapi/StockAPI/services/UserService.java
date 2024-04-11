@@ -10,5 +10,5 @@ import java.util.Map;
 public interface UserService {
     User register(User entity) throws NoSuchAlgorithmException;
 
-    Map<String, Object> login(String email, String password) throws NoSuchAlgorithmException;
+    Map<String, Object> login(String email, String password);
 }
