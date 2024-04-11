@@ -20,14 +20,16 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication) {
 
         String name = authentication.getName();
-        String role = authentication.getAuthorities().stream().findFirst().get().getAuthority();
         Date currentDate = new Date();
 
         Date expireDate = new Date(currentDate.getTime() + 1000 * 60 * 60 * 24);
 
-        String token = Jwts.builder().claim("name", name).claim("role", role).issuedAt(new Date()).expiration(expireDate).signWith(key()).compact();
-
-        return token;
+        return Jwts.builder()
+                .setSubject(name)
+                .setIssuedAt(currentDate)
+                .setExpiration(expireDate)
+                .signWith(key())
+                .compact();
     }
 
     private Key key() {
@@ -39,7 +41,8 @@ public class JwtTokenProvider {
         return true;
 
     }
+
     public String getEmail(String token) {
-        return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getBody().get("name", String.class);
+        return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getPayload().getSubject();
     }
 }

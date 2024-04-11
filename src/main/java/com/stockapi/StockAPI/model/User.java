@@ -34,38 +34,30 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(role -> authorities.add((GrantedAuthority) role::getRoleName));
+        return authorities;
     }
 
-    @Override
-    @JsonIgnore
-    public String getUsername() {
-        return null;
-    }
+        @Override @JsonIgnore public String getUsername() {
+            return email;
+        }
 
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
-        return false;
-    }
+        @Override @JsonIgnore public boolean isAccountNonExpired() {
+            return false;
+        }
 
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
-        return false;
-    }
+        @Override @JsonIgnore public boolean isAccountNonLocked () {
+            return false;
+        }
 
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
+        @Override @JsonIgnore public boolean isCredentialsNonExpired () {
+            return false;
+        }
 
-    @Override
-    @JsonIgnore
-    public boolean isEnabled() {
-        return false;
+        @Override @JsonIgnore public boolean isEnabled () {
+            return false;
+        }
     }
-}
 
 

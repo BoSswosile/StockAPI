@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) throws NoSuchAlgorithmException {
-        Optional<Role> role = roleRepo.findByRoleName(Role.RoleName.VIEWER.name());
+        Optional<Role> role = roleRepo.findByRoleName(Role.RoleName.ROLE_VIEWER.name());
         if(role.isEmpty()) return null;
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
