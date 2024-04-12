@@ -2,6 +2,7 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
+import FloatingNotification from "@/components/FloatingNotification";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -15,6 +16,32 @@ export default function LoginPage() {
             router.push('/');
         }
     }, []);
+
+
+    async function fetchUserRole(token) {
+        let role;
+
+        try {
+            const response = await fetch('http://localhost:8080/user/getUserRole', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            role = data[0].roleName;
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+        }
+
+        return role;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -31,6 +58,8 @@ export default function LoginPage() {
             const jwt = await response.text();
             console.log(jwt);
             localStorage.setItem('jwt', jwt);
+            const role = await fetchUserRole(jwt);
+            localStorage.setItem('role', role);
             localStorage.setItem('message', "Vous êtes maintenant connecté");
             console.log("jwt", jwt)
             router.push('/');
@@ -41,13 +70,14 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <FloatingNotification />
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                         Connectez-vous
                     </h2>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-3" onSubmit={handleSubmit}>
                     <input type="hidden" name="remember" value="true"/>
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
@@ -93,7 +123,12 @@ export default function LoginPage() {
                         </button>
                     </div>
                 </form>
-                <div className="text-center mt-4">
+                <div className="text-center mt-1">
+                    <Link href="/" className="text-indigo-500 hover:underline">
+                        Page produit
+                    </Link>
+                </div>
+                <div className="text-center mt-1">
                     <p>Pas de compte?</p>
                     <Link href="/auth/register" className="text-indigo-500 hover:underline">
                         Inscription
