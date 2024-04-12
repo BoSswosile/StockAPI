@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 import {useEffect} from "react";
+import FloatingNotification from "@/components/FloatingNotification";
 
 export default function Logout() {
 
@@ -11,14 +12,16 @@ export default function Logout() {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
             localStorage.removeItem('jwt');
+            localStorage.removeItem('role');
         }else {
             localStorage.setItem('message', "Vous n'êtes pas connecté");
-            router.push('/auth/login');
+            router.push('/');
         }
     }, []);
 
     return (
         <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <FloatingNotification />
             <div class="max-w-md w-full space-y-8">
                 <div>
                     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
