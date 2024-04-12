@@ -6,6 +6,8 @@ import com.stockapi.StockAPI.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -14,5 +16,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleByName(String roleName) {
         return roleRepo.findByRoleName(roleName).orElse(null);
+    }
+
+    @Override
+    public List<Role> getRoles() {
+        return roleRepo.findAll();
     }
 }

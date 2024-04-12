@@ -33,6 +33,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('STOREKEEPER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable String id) {
         productService.deleteById(id);
@@ -50,6 +51,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('STOREKEEPER')")
     @PutMapping("/update/{id}")
     public ResponseEntity<Product> update(@PathVariable String id, @RequestBody Product updatedProduct){
         Optional<Product> product = productService.findById(id);
