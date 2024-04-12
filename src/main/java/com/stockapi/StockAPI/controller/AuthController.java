@@ -32,6 +32,10 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<?> register(@RequestBody User entity) throws NoSuchAlgorithmException {
+        if (entity.getEmail() == null || entity.getPassword() == null || entity.getName() == null)
+            return new ResponseEntity<>("One value or more is empty", HttpStatus.BAD_REQUEST);
+        if (userRepo.findByEmail(entity.getEmail()).isPresent())
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         User student = userService.register(entity);
         if (student == null) return new ResponseEntity<>("Internal Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(student, HttpStatus.CREATED);

@@ -1,16 +1,15 @@
 package com.stockapi.StockAPI.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +22,8 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     private String id;
+    // non null
     private String name;
-    @Column(unique = true)
     private String email;
     private String password;
 

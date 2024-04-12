@@ -1,5 +1,6 @@
 package com.stockapi.StockAPI.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,7 +18,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(Authentication authentication, Claims claims) {
 
         String name = authentication.getName();
         Date currentDate = new Date();
@@ -26,6 +27,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(name)
+                .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key())
