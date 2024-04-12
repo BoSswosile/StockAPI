@@ -50,7 +50,7 @@ public class UserController {
         return new ResponseEntity<>(newUser.get().getRoles(), HttpStatus.OK);
     }
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @GetMapping("getAllUser")
+    @GetMapping("getAllUsers")
     public ResponseEntity<?> getAllUser(@RequestHeader("Authorization") String token) {
         List<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
