@@ -19,6 +19,12 @@ public class Role {
     private String id;
     private String roleName;
 
+    public static Role valueOf(String role) {
+        Role r = new Role();
+        r.setRoleName(role);
+        return r;
+    }
+
     public enum RoleName {
         ROLE_ADMINISTRATOR,ROLE_STOREKEEPER,ROLE_VIEWER
     }

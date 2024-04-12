@@ -1,5 +1,6 @@
 package com.stockapi.StockAPI.security;
 
+import com.stockapi.StockAPI.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -18,7 +19,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    public String generateToken(Authentication authentication, Claims claims) {
+    public String generateToken(Authentication authentication) {
 
         String name = authentication.getName();
         Date currentDate = new Date();
@@ -27,7 +28,6 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(name)
-                .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key())
@@ -46,5 +46,9 @@ public class JwtTokenProvider {
 
     public String getEmail(String token) {
         return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getPayload().getSubject();
+    }
+
+    public Role getRoleFromToken(String token) {
+        return Role.valueOf(Jwts.parser().verifyWith((SecretKey) key()).build().parseClaimsJws(token).getBody().get("role", String.class));
     }
 }
