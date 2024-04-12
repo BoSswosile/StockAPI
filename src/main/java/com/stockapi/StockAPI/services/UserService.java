@@ -5,6 +5,7 @@ import com.stockapi.StockAPI.model.User;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,4 +20,6 @@ public interface UserService {
     void setRole(String userId, Role role);
 
     Optional<User> findById(String userId);
+
+    List<User> findAll();
 }

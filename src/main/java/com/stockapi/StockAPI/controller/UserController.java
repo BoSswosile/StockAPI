@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -48,4 +49,11 @@ public class UserController {
         Optional<User> newUser = userService.findById(userId);
         return new ResponseEntity<>(newUser.get().getRoles(), HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @GetMapping("getAllUser")
+    public ResponseEntity<?> getAllUser(@RequestHeader("Authorization") String token) {
+        List<User> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
 }
