@@ -3,10 +3,19 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 
 import FloatingNotification from "@/components/FloatingNotification";
+import NavButtons from "@/components/NavButtons";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isNotViewer, setIsNotViewer] = useState(false);
+
+  useEffect(() => {
+    const role = localStorage.getItem('role');
+    if (role == 'ROLE_ADMINISTRATOR' || role == 'ROLE_STOREKEEPER') {
+      setIsNotViewer(true);
+    }
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -50,6 +59,7 @@ export default function Home() {
   return (
       <main className="flex flex-col justify-center items-center h-[100vh]">
         <FloatingNotification />
+        <NavButtons />
         <div className="flex justify-center w-full px-4 mb-4">
           <div className="w-auto relative">
             <input
@@ -78,9 +88,11 @@ export default function Home() {
             <h4 className="text-lg font-bold text-navy-700 dark:text-white">
               Produits
             </h4>
-            <Link href={`/product/new`}
-                  className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">+
-            </Link>
+            { isNotViewer &&
+              <Link href={`/product/new`}
+                    className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">+
+              </Link>
+            }
           </div>
           <div className="w-full overflow-x-scroll px-4 md:overflow-x-hidden">
             <table role="table" className="w-full min-w-[500px] overflow-x-scroll">
@@ -141,17 +153,19 @@ export default function Home() {
                     Prix
                   </div>
                 </th>
-                <th
-                    colSpan="1"
-                    role="columnheader"
-                    title="Toggle SortBy"
-                >
-                  <div
-                      className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
-                  >
-                    Action
-                  </div>
-                </th>
+                { isNotViewer &&
+                    <th
+                        colSpan="1"
+                        role="columnheader"
+                        title="Toggle SortBy"
+                    >
+                      <div
+                          className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                      >
+                        Action
+                      </div>
+                    </th>
+                }
               </tr>
               </thead>
               <tbody role="rowgroup" className="px-4">
@@ -184,15 +198,17 @@ export default function Home() {
                         {product.price} €
                       </p>
                     </td>
-                    <td className="py-3 text-sm" role="cell">
-                      <Link href={`/product/${product.id}`}
-                            className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier
-                      </Link>
-                      <button type="button"
-                              onClick={() => handleDelete(product.id)}
-                              className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
-                      </button>
-                    </td>
+                    { isNotViewer &&
+                      <td className="py-3 text-sm" role="cell">
+                        <Link href={`/product/${product.id}`}
+                              className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier
+                        </Link>
+                        <button type="button"
+                                onClick={() => handleDelete(product.id)}
+                                className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">-
+                        </button>
+                      </td>
+                    }
                   </tr>
               ))}
               </tbody>
