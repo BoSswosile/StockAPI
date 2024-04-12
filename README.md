@@ -19,3 +19,6 @@ Ce projet est un système de gestion de stock de meubles conçu pour simplifier 
 ```sh
 git clone https://github.com/BoSswosile/StockAPI/
 ```
+
+### Lien vers les diagrammes de séquences
+![DIAGRAMMES](./DIAGRAMMES_DE_SEQUENCE.md)
