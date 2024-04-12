@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import {useRouter, useSearchParams} from 'next/navigation'
+import OnlyStoreKeeper from "@/components/OnlyStoreKeeper";
 
 export default function EditProductPage( {params} ) {
 
@@ -23,7 +24,13 @@ export default function EditProductPage( {params} ) {
         // For demonstration, we'll use a mock fetch
         console.log(id)
         const fetchProductDetails = async () => {
-            const response = await fetch(`http://localhost:8080/product/${id}`);
+            const response = await fetch(`http://localhost:8080/product/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                    }
+                });
             console.log(response);
 
             const data = await response.json();
@@ -58,7 +65,8 @@ export default function EditProductPage( {params} ) {
             const response = await fetch(`http://localhost:8080/product/update/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
                 },
                 body: JSON.stringify(body)
             });
@@ -76,6 +84,7 @@ export default function EditProductPage( {params} ) {
 
     return (
         <main className="flex flex-col justify-center items-center h-screen">
+            <OnlyStoreKeeper />
             <div className="relative flex max-w-4xl w-full flex-col rounded-10 border border-gray-200 bg-white shadow-md p-8">
                 <h4 className="text-2xl font-bold text-navy-700 mb-8">Modifier le Produit</h4>
                 <form onSubmit={handleSubmit} className="space-y-6">

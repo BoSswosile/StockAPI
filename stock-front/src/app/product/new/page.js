@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
+import OnlyStoreKeeper from "@/components/OnlyStoreKeeper";
 
 export default function AddProductPage() {
     const [product, setProduct] = useState({
@@ -43,7 +44,8 @@ export default function AddProductPage() {
             const response = await fetch('http://localhost:8080/product/create', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
                 },
                 body: JSON.stringify(body)
             });
@@ -61,6 +63,7 @@ export default function AddProductPage() {
 
     return (
         <main className="flex flex-col justify-center items-center h-screen">
+            <OnlyStoreKeeper />
             <div className="relative flex max-w-4xl w-full flex-col rounded-10 border border-gray-200 bg-white shadow-md p-8">
                 <h4 className="text-2xl font-bold text-navy-700 mb-8">Ajouter un Produit</h4>
                 <form onSubmit={handleSubmit} className="space-y-6">
