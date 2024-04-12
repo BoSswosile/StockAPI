@@ -16,5 +16,7 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    void setRole(String userId, String roleName);
+    void setRole(String userId, Role role);
+
+    Optional<User> findById(String userId);
 }

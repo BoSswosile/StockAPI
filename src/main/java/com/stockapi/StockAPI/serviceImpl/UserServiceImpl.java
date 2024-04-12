@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,12 +51,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setRole(String userId, String roleName) {
-        Optional<User> user = userRepo.findById(Long.valueOf(userId));
+    public void setRole(String userId, Role role) {
+        Optional<User> user = findById(userId);
         if (user.isEmpty()) return;
-        Optional<Role> role = roleRepo.findByRoleName(roleName);
-        if (role.isEmpty()) return;
-        user.get().getRoles().add(role.get());
+        if (user.get().getRoles().contains(role)) return;
+        if (roleRepo.findByRoleName(role.getRoleName()).isEmpty()) return;
+        List<Role> roles = user.get().getRoles();
+        roles.clear();
+        roles.add(role);
         userRepo.save(user.get());
+    }
+
+    @Override
+    public Optional<User> findById(String userId) {
+        return userRepo.findById(userId);
     }
 }

@@ -3,6 +3,7 @@ package com.stockapi.StockAPI.controller;
 import com.stockapi.StockAPI.model.Role;
 import com.stockapi.StockAPI.model.User;
 import com.stockapi.StockAPI.services.AuthService;
+import com.stockapi.StockAPI.services.RoleService;
 import com.stockapi.StockAPI.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +26,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
+
     @GetMapping("getUserRole")
-    public ResponseEntity<?> getRole(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> getUserRole(@RequestHeader("Authorization") String token) {
         token = token.substring(7);
         Optional<User> user = authService.findUserByToken(token);
         if (user.isEmpty()) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(user.get().getRoles(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("setRole")
-    public ResponseEntity<?> setRole(@RequestHeader("Authorization") String token, @RequestBody String userId, @RequestBody Role.RoleName role) {
-        token = token.substring(7);
-        Optional<User> user = authService.findUserByToken(token);
+
+    @PostMapping("setRole/{userId}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<?> setRole(@RequestBody Role roleName, @PathVariable String userId){
+        Optional<User> user = userService.findById(userId);
         if (user.isEmpty()) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-        if (user.get().getRoles().contains("ROLE_ADMIN")) {
-            userService.setRole(userId, role.name());
-            return new ResponseEntity<>("Role set", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        Role role = roleService.getRoleByName(roleName.getRoleName());
+        userService.setRole(userId, role);
+        Optional<User> newUser = userService.findById(userId);
+        return new ResponseEntity<>(newUser.get().getRoles(), HttpStatus.OK);
     }
 }

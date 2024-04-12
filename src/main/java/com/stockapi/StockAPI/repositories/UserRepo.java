@@ -12,4 +12,6 @@ public interface UserRepo extends MongoRepository<User, Long>{
     User save(User user);
 
     Optional<User> findByEmail(String email);
+
+    Optional<User> findById(String userId);
 }
