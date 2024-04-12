@@ -108,7 +108,12 @@ export default function RegisterPage() {
                         </button>
                     </div>
                 </form>
-                <div className="text-center mt-4">
+                <div className="text-center mt-1">
+                    <Link href="/" className="text-indigo-500 hover:underline">
+                        Page produit
+                    </Link>
+                </div>
+                <div className="text-center mt-1">
                     <p>Déjà un compte?</p>
                     <Link className="text-indigo-500 hover:underline" href="/auth/login">
                         Connexion
