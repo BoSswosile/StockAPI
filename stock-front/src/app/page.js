@@ -39,6 +39,10 @@ export default function Home() {
     try {
       const response = await fetch(`http://localhost:8080/product/delete/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
       });
 
       if (!response.ok) {
