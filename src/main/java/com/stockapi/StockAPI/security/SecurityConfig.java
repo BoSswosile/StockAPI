@@ -38,7 +38,7 @@ public class SecurityConfig {
 //                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
                     authorize.requestMatchers("/auth/**").permitAll();
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-                    authorize.requestMatchers(HttpMethod.GET, "/product").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/product/**").permitAll();
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 
