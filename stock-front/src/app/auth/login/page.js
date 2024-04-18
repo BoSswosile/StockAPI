@@ -20,7 +20,6 @@ export default function LoginPage() {
 
     async function fetchUserRole(token) {
         let role;
-
         try {
             const response = await fetch('http://localhost:8080/user/getUserRole', {
                 method: 'GET',
@@ -64,6 +63,7 @@ export default function LoginPage() {
             console.log("jwt", jwt)
             router.push('/');
         } else {
+            localStorage.setItem('message', "Email ou mot de passe incorrect");
             console.error('Email ou mot de passe incorrect');
         }
     };
